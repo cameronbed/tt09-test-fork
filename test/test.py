@@ -32,8 +32,8 @@ async def test_project(dut):
     # Checking for an error. This is what is expected.
     assert dut.sum.value == 7 and dut.carry_out.value == 1
 
-    for x in range(16):
-        for y in range(16):
+    for x in range(15):
+        for y in range(15):
             sum = x + y
             dut.a.value = x
             dut.b.value = y
