@@ -17,15 +17,19 @@ async def test_project(dut):
     dut._log.info("Test project behavior")
 
     # Set the input values you want to test
+    # a and b are inputs to our testbench
     dut.a.value = 13
     dut.b.value = 10
 
     # Wait for one clock cycle to see the output values
+    # This will be different for each design.
     await ClockCycles(dut.clk, 10)
 
     # The following assersion is just an example of how to check the output values.
     # Change it to match the actual expected output of your module:
     dut._log.info(f"value of outputs are: {dut.sum.value} and {dut.carry_out.value}.")
+    # Checking of the constraints after the assert are expired.
+    # Checking for an error. This is what is expected.
     assert dut.sum.value == 7 and dut.carry_out.value == 1 
 
     # Keep testing the module by changing the input values, waiting for

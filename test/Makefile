@@ -32,10 +32,12 @@ VERILOG_SOURCES += $(PWD)/gate_level_netlist.v
 endif
 
 # Include the testbench sources:
+# Name of tb
 VERILOG_SOURCES += $(PWD)/tb.v
 TOPLEVEL = tb
 
 # MODULE is the basename of the Python test file
+# name of python file 
 MODULE = test
 
 # include cocotb's make rules to take care of the simulator setup

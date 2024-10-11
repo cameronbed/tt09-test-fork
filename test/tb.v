@@ -5,7 +5,6 @@
    that can be driven / tested by the cocotb test.py.
 */
 module tb ();
-
   // Dump the signals to a VCD file. You can view it with gtkwave.
   initial begin
     $dumpfile("tb.vcd");
@@ -18,6 +17,7 @@ module tb ();
   reg rst_n;
   reg ena;
   reg [3:0] a,b;
+// IO For Board?
   reg [7:0] uio_in;
   wire [3:0] sum;
   wire carry_out;
@@ -29,7 +29,7 @@ module tb ();
   wire VGND = 1'b0;
 `endif
 
-  // Replace tt_um_example with your module name:
+  // Required for TT. Replace tt_um_example with your module name:
   tt_um_koggestone_adder4 user_project (
 
       // Include power ports for the Gate Level test:
@@ -38,7 +38,8 @@ module tb ();
       .VGND(VGND),
 `endif
 
-      .ui_in  ({b,a}),    // Dedicated inputs
+      //a and b are inputs to the testbench. They will be connected to the inputs of the uut
+      .ui_in  ({b,a}),    // Dedicated inputs. {} is concatination
       .uo_out ({uo_dum,carry_out,sum}),   // Dedicated outputs
       .uio_in (uio_in),   // IOs: Input path
       .uio_out(uio_out),  // IOs: Output path
