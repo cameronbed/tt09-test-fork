@@ -30,7 +30,20 @@ async def test_project(dut):
     dut._log.info(f"value of outputs are: {dut.sum.value} and {dut.carry_out.value}.")
     # Checking of the constraints after the assert are expired.
     # Checking for an error. This is what is expected.
-    assert dut.sum.value == 7 and dut.carry_out.value == 1 
+    assert dut.sum.value == 7 and dut.carry_out.value == 1
+
+    for x in range(16):
+        for y in range(16):
+            sum = x + y
+            dut.a.value = x
+            dut.b.value = y
+            await ClockCycles(dut.clk, 10)
+            dut._log.info(f"value of outputs are: {dut.sum.value} and {dut.carry_out.value}.")
+            if sum > 10:
+                assert dut.sum.value == sum and dut.carry_out.value == 1
+            else:
+                assert dut.sum.value == sum and dut.carry_out.value == 0
+    return
 
     # Keep testing the module by changing the input values, waiting for
     # one or more clock cycles, and asserting the expected output values.
