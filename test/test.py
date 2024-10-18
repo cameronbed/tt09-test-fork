@@ -1,50 +1,52 @@
 # SPDX-FileCopyrightText: © 2024 Tiny Tapeout
 # SPDX-License-Identifier: Apache-2.0
-
 import cocotb
 from cocotb.clock import Clock
 from cocotb.triggers import ClockCycles
+import random
 
 
 @cocotb.test()
 async def test_project(dut):
-    dut._log.info("Start")
+    """Test the Kogge-Stone Adder for 1000 cases"""
 
-    # Set the clock period to 10 us (100 KHz)
+    # Initialize the clock with a 100KHz frequency
     clock = Clock(dut.clk, 10, units="us")
     cocotb.start_soon(clock.start())
 
-    dut._log.info("Test project behavior")
+    # Ensure reset is not active
+    dut.rst_n.value = 1
+    dut.ena.value = 1
 
-    # Set the input values you want to test
-    # a and b are inputs to our testbench
-    dut.a.value = 13
-    dut.b.value = 10
+    # Function to compute expected sum and carry
+    def kogge_stone_adder(a, b):
+        result = a + b
+        sum_val = result & 0xF  # 4-bit sum
+        carry_out = (result >> 4) & 1  # 1-bit carry-out
+        return sum_val, carry_out
 
-    # Wait for one clock cycle to see the output values
-    # This will be different for each design.
-    await ClockCycles(dut.clk, 10)
+    # Run 1000 random test cases
+    for _ in range(1000):
+        # Randomly generate 4-bit inputs for `a` and `b`
+        a_val = random.randint(0, 15)
+        b_val = random.randint(0, 15)
 
-    # The following assersion is just an example of how to check the output values.
-    # Change it to match the actual expected output of your module:
-    dut._log.info(f"value of outputs are: {dut.sum.value} and {dut.carry_out.value}.")
-    # Checking of the constraints after the assert are expired.
-    # Checking for an error. This is what is expected.
-    assert dut.sum.value == 7 and dut.carry_out.value == 1
+        # Set the inputs in the DUT
+        dut.a.value = a_val
+        dut.b.value = b_val
 
-    for x in range(15):
-        for y in range(15):
-            sum = x + y
-            dut.a.value = x
-            dut.b.value = y
-            await ClockCycles(dut.clk, 10)
-            dut._log.info(f"value of outputs are: {dut.sum.value} and {dut.carry_out.value}.")
-            if sum > 10:
-                assert dut.sum.value == sum and dut.carry_out.value == 1
-            else:
-                assert dut.sum.value == sum and dut.carry_out.value == 0
-    return
+        # Wait for a few clock cycles
+        await ClockCycles(dut.clk, 10)
 
-    # Keep testing the module by changing the input values, waiting for
-    # one or more clock cycles, and asserting the expected output values.
+        # Compute expected values
+        expected_sum, expected_carry = kogge_stone_adder(a_val, b_val)
+
+        # Log the values and assert correctness
+        dut._log.info(f"Testing inputs a={a_val}, b={b_val}")
+        dut._log.info(f"Expected sum={expected_sum}, carry_out={expected_carry}")
+        
+        # Check if the DUT output matches the expected results
+        assert dut.sum.value == expected_sum, f"Sum mismatch: Expected {expected_sum}, Got {dut.sum.value}"
+        assert dut.carry_out.value == expected_carry, f"Carry mismatch: Expected {expected_carry}, Got {dut.carry_out.value}"
     
+    dut._log.info("All 1000 test cases passed.")
