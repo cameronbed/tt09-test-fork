@@ -9,15 +9,12 @@ You can also include images in this folder and reference them in the markdown. E
 
 ## How it works
 
-Explain.
-Explain.
+Kogge-Stone adder adds two 4-bit values together. Adding each bit together two times, one with a persumed carry-in and one without. Holding the results of each addtion, for each bit, it then computes the first result and based on that result, it picks from the other pre-computed result.
 
 ## How to test
+Give A and B values and observe output to expected output based on A and B.
 
-Test.
-Test.
 
 ## External hardware
 
-External.
-External.
+No external hardware needed.
