@@ -1,9 +1,9 @@
 # Tiny Tapeout project information
 project:
-  title:        "4-bit kogge stone adder"      # Project title
-  author:       "Rayn Xiao"      # Your name
+  title:        "4-bit ALU"      # Project title
+  author:       "Rayn Xian"      # Your name
   discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
-  description:  "Implement a 4-bit adder for testing"      # One line description of what your project does
+  description:  "Implement a 4-bit alu for testing"      # One line description of what your project does
   language:     "Verilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
   clock_hz:     0       # Clock frequency in Hz (or 0 if not applicable)
 
